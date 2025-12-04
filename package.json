@@ -1,0 +1,23 @@
+{
+  "name": "d3_graphics",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "prettier": "3.6.2",
+    "vite": "^7.1.7"
+  },
+  "dependencies": {
+    "arquero": "^8.0.3",
+    "d3": "^7.9.0",
+    "xlsx": "^0.18.5"
+  }
+}
