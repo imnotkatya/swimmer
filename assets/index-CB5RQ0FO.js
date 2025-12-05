@@ -150,12 +150,12 @@ Note: ${t1}. ${r1}, or ${vk}.`,wk=`The ${xh} method is not valid in multi-table 
           <div class="images">
             <div id="excel-template">
               <a href="/src/data/info_template.xlsx" download>
-                <img src="/src/data/data.png" alt="Пример данных Excel">
+               <img src="./data.png" alt="Пример данных Excel">
                 <p><center>Пример данных Excel</center></p>
               </a>
             </div>
             <div id="plot-template">
-              <img src="/src/data/result.png" alt="Пример графика">
+             <img src="./result.png" alt="Пример графика">
               <p><center>Пример графика</center></p>
             </div>
           </div>
