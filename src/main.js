@@ -4,7 +4,7 @@ import { setupFileUpload } from "./upload";
 const STYLES = `
   @font-face {
     font-family: 'SymbolsNerdFontMono-Regular';
-    src: url('/src/fonts/SymbolsNerdFontMono-Regular.ttf') format('truetype');
+    src: url('./SymbolsNerdFontMono-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: block;
@@ -99,13 +99,13 @@ const APP_TEMPLATE = `
           <p>Для работы с данной программой нужно...</p>
           <div class="images">
             <div id="excel-template">
-              <a href="/src/data/info_template.xlsx" download>
-                <img src="/src/data/data.png" alt="Пример данных Excel">
+            <a href="info_template.xlsx" download>
+               <img src="./data.png" alt="Пример данных Excel">
                 <p><center>Пример данных Excel</center></p>
               </a>
             </div>
             <div id="plot-template">
-              <img src="/src/data/result.png" alt="Пример графика">
+             <img src="./result.png" alt="Пример графика">
               <p><center>Пример графика</center></p>
             </div>
           </div>
