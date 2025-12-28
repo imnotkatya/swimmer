@@ -7,6 +7,29 @@ import * as aq from "arquero";
 import makeTable from "./makeTable";
 import * as XLSX from "xlsx";
 
+function handleJsonUpload(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const jsonData = JSON.parse(e.target.result);
+      let stylesData, settingsData, datasetLongLoad;
+      if (jsonData.styles && jsonData.settings && jsonData.data) {
+        stylesData = jsonData.styles;
+        settingsData = jsonData.settings;
+        datasetLongLoad = jsonData.data;
+      }
+
+      resolve({
+        stylesData: aq.from(stylesData),
+        settingsData: aq.from(settingsData),
+        datasetLongLoad: aq.from(datasetLongLoad),
+      });
+    };
+    reader.onerror = () => reject(new Error("Ошибка чтения файла"));
+    reader.readAsText(file);
+  });
+}
 function handleExcelUpload(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -97,7 +120,7 @@ const defaultHandle = (file) => {
   const fileName = file.name.toLowerCase();
 
   if (fileName.endsWith(".json")) {
-    return handleExcelUpload(file);
+    return handleJsonUpload(file);
   } else if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
     return handleExcelUpload(file);
   } else {
