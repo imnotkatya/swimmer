@@ -6,30 +6,7 @@ import * as aq from "arquero";
 import makeTable from "./makeTable";
 import * as XLSX from "xlsx";
 
-function handleExcelUpload(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-      const workbook = XLSX.read(e.target.result, { type: "array" });
-      const toTable = (sheet) =>
-        aq.from(
-          XLSX.utils.sheet_to_json(workbook.Sheets[sheet], { defval: "" })
-        );
-
-      resolve({
-        stylesTable: toTable("styles"),
-        settingsTable: toTable("settings"),
-        datasetLongLoad: toTable("data"),
-      });
-    };
-
-    reader.onerror = () => reject(new Error("error"));
-    reader.readAsArrayBuffer(file);
-  });
-}
-
-function createScale(colors, property) {
+export function createScale(colors, property) {
   return d3
     .scaleOrdinal()
     .domain(colors.map((c) => c.key))
@@ -44,7 +21,7 @@ function getDomainX(parsedDatasetLong) {
     .array("time");
   return d3.extent(times);
 }
-function convertStep(oxDimension) {
+export function convertStep(oxDimension) {
   if (typeof oxDimension === "string") {
     const normalizedStep = oxDimension.toLowerCase().trim();
 
@@ -290,69 +267,6 @@ function drawLegend(svg, scales, settingsContext, colors) {
     .style("font-size", "16px")
     .text((d) => d.label);
 }
-function processData(raw) {
-  const { stylesData, datasetLongLoad, settingsData } = raw;
-  const settings = settingsData.reduce((acc, d) => {
-    acc[d.measure] = d.value;
-    return acc;
-  }, {});
-
-  const colors = stylesData.map((d) => ({
-    key: d.key,
-    type: d.type,
-    color: d.color,
-    label: d.label,
-    strokeDash: +d.stroke_dash,
-    yModify: +d.y_modify,
-    xModify: +d.x_modify,
-    stroke: d.stroke,
-    symbol: d.symbol,
-    symbolSize: +d.symbol_size,
-    columnHeight: +d.column_height || 30,
-    strokeWidth: +d["stroke-width"],
-  }));
-  const baseSettings = {
-    width: settings.width || 1600,
-    height: settings.height || 900,
-    label: settings.label || "",
-    step: settings.step || 5,
-    oxDimension: convertStep(settings.oxDimension),
-  };
-  const minD = stylesData[0].key;
-  const { oxDimension } = baseSettings;
-  const datasetLong = parseDate(datasetLongLoad, minD, oxDimension);
-  const parsedDatasetLong = convertWideToLong(datasetLong);
-  const sortedData = sort(parsedDatasetLong);
-  const tableData = makeTable(datasetLong, minD);
-  const patients = tableData.objects();
-
-  const fields = tableData.columnNames();
-  const uniqueNames = sortedData.groupby("_rowNumber").array("_rowNumber");
-
-  const scales = {
-    color: createScale(colors, "color"),
-    strokeColor: createScale(colors, "stroke"),
-    strokeDash: createScale(colors, "strokeDash"),
-    strokeWidth: createScale(colors, "strokeWidth"),
-    yModified: createScale(colors, "yModify"),
-    xModified: createScale(colors, "xModify"),
-    symbolSize: createScale(colors, "symbolSize"),
-    symbols: createScale(colors, "symbol"),
-    typeFigure: createScale(colors, "type"),
-    columnHeight: createScale(colors, "columnHeight"),
-  };
-
-  return {
-    colors,
-    baseSettings,
-    parsedDatasetLong,
-    tableData,
-    patients,
-    fields,
-    uniqueNames,
-    scales,
-  };
-}
 
 function drawChart(processedData, container) {
   const {
@@ -450,13 +364,6 @@ function drawChart(processedData, container) {
   drawLegend(svg, scales, settingsContext, colors);
 }
 
-export async function drawPlot(file, chartContainer) {
-  const excelData = await handleExcelUpload(file);
-  const raw = {
-    stylesData: excelData.stylesTable.objects(),
-    settingsData: excelData.settingsTable.objects(),
-    datasetLongLoad: excelData.datasetLongLoad,
-  };
-  const processedData = processData(raw);
+export async function drawPlot(processedData, chartContainer) {
   drawChart(processedData, chartContainer);
 }
