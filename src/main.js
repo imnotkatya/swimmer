@@ -13,6 +13,7 @@ function handleJsonUpload(file) {
 
     reader.onload = (e) => {
       const jsonData = JSON.parse(e.target.result);
+
       let stylesData, settingsData, datasetLongLoad;
       if (jsonData.styles && jsonData.settings && jsonData.data) {
         stylesData = jsonData.styles;
@@ -54,6 +55,7 @@ function handleExcelUpload(file) {
 }
 function processData(raw) {
   const { stylesData, datasetLongLoad, settingsData } = raw;
+
   const settings = settingsData.objects().reduce((acc, d) => {
     acc[d.measure] = d.value;
     return acc;
@@ -80,9 +82,11 @@ function processData(raw) {
     step: settings.step || 5,
     oxDimension: convertStep(settings.oxDimension),
   };
+
   const minD = stylesData.objects()[0].key;
   const { oxDimension } = baseSettings;
   const datasetLong = parseDate(datasetLongLoad, minD, oxDimension);
+
   const parsedDatasetLong = convertWideToLong(datasetLong);
   const sortedData = sort(parsedDatasetLong);
   const tableData = makeTable(datasetLong, minD);

@@ -1,7 +1,8 @@
 {
   "data": [
     {
-      "name": "diagnose 1",
+    "diagnose":"diagnose 1",
+      "name": "1",
       "data___start": "2019-06-25",
       "data___end": "2022-03-05",
       "death___event": "2022-03-14",
@@ -26,7 +27,8 @@
       "four___event": ""
     },
     {
-      "name": "diagnose 2",
+     "diagnose":"diagnose 2",
+      "name": "2",
       "data___start": "2018-08-28",
       "data___end": "2022-07-08",
       "death___event": "2022-07-10",
@@ -51,7 +53,8 @@
       "four___event": ""
     },
     {
-      "name": "diagnose 3",
+   "diagnose":"diagnose 3",
+      "name": "3",
       "data___start": "2020-07-31",
       "data___end": "2022-05-03",
       "death___event": "2022-05-03",
@@ -76,7 +79,8 @@
       "four___event": ""
     },
     {
-      "name": "diagnose 4",
+      "diagnose":"diagnose 4",
+      "name": "4",
       "data___start": "2021-12-22",
       "data___end": "2024-08-10",
       "death___event": "",
@@ -101,7 +105,8 @@
       "four___event": "2023-06-04"
     },
     {
-      "name": "diagnose 1",
+      "diagnose":"diagnose 5",
+      "name": "5",
       "data___start": "2018-01-10",
       "data___end": "2024-08-20",
       "death___event": "",
@@ -126,7 +131,8 @@
       "four___event": "2024-01-30"
     },
     {
-      "name": "diagnose 2",
+       "diagnose":"diagnose 6",
+      "name": "6",
       "data___start": "2021-03-28",
       "data___end": "2024-03-10",
       "death___event": "2024-03-11",
@@ -149,90 +155,17 @@
       "two___event": "2024-02-20",
       "three___event": "",
       "four___event": ""
-    },
-    {
-      "name": "diagnose 3",
-      "data___start": "2022-05-07",
-      "data___end": "2024-08-20",
-      "death___event": "",
-      "nodeath___event": "2024-08-11",
-      "first___start": "2022-05-06",
-      "first___end": "2023-11-03",
-      "first_PR_1___event": "2022-10-07",
-      "first_СR_1___event": "",
-      "second___start": "",
-      "second___end": "",
-      "third___start": "",
-      "third___end": "",
-      "fourth___start": "",
-      "fourth___end": "",
-      "fifth___start": "",
-      "fifth___end": "",
-      "six___start": "2022-12-29",
-      "six___end": "2024-08-04",
-      "one___event": "",
-      "two___event": "",
-      "three___event": "2023-07-05",
-      "four___event": ""
-    },
-    {
-      "name": "diagnose 4",
-      "data___start": "2018-05-14",
-      "data___end": "2024-08-11",
-      "death___event": "",
-      "nodeath___event": "2024-08-20",
-      "first___start": "2018-05-04",
-      "first___end": "2018-07-27",
-      "first_PR_1___event": "",
-      "first_СR_1___event": "",
-      "second___start": "2018-07-28",
-      "second___end": "2020-01-10",
-      "third___start": "",
-      "third___end": "",
-      "fourth___start": "2019-06-29",
-      "fourth___end": "2020-12-10",
-      "fifth___start": "",
-      "fifth___end": "",
-      "six___start": "",
-      "six___end": "",
-      "one___event": "",
-      "two___event": "2020-01-10",
-      "three___event": "",
-      "four___event": ""
-    },
-    {
-      "name": "diagnose 5",
-      "data___start": "2018-06-25",
-      "data___end": "2024-08-20",
-      "death___event": "",
-      "nodeath___event": "2024-08-11",
-      "first___start": "2018-06-15",
-      "first___end": "2020-01-27",
-      "first_PR_1___event": "",
-      "first_СR_1___event": "",
-      "second___start": "2020-01-28",
-      "second___end": "2021-01-10",
-      "third___start": "2021-01-10",
-      "third___end": "2024-08-04",
-      "fourth___start": "",
-      "fourth___end": "",
-      "fifth___start": "",
-      "fifth___end": "",
-      "six___start": "",
-      "six___end": "",
-      "one___event": "",
-      "two___event": "",
-      "three___event": "",
-      "four___event": ""
     }
+    
   ],
-  "settings": {
-    "height": 900,
-    "width": 1200,
-    "oxDimension": "month",
-    "label": "Time since start, months",
-    "step": 6
-  },
+  "settings": [
+    {"measure": "height", "value":"900"},
+     {"measure": "width", "value":"1200"},
+      {"measure": "oxDimension", "value":"month"},
+       {"measure": "label", "value":"Time since start, months"}, 
+       {"measure": "step", "value":"6"}
+   
+  ],
   "styles": [
     {
       "key": "data",

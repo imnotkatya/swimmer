@@ -1,10 +1,6 @@
 import * as d3 from "d3";
-import convertWideToLong from "./convertWideToLong";
-import parseDate from "./parseDate";
-import sort from "./sort";
+
 import * as aq from "arquero";
-import makeTable from "./makeTable";
-import * as XLSX from "xlsx";
 
 export function createScale(colors, property) {
   return d3
@@ -323,6 +319,7 @@ function drawChart(processedData, container) {
     .range([marginLeft, width - marginRight]);
 
   const userStep = baseSettings.step;
+
   const [minValue, maxValue] = x.domain();
 
   svg
