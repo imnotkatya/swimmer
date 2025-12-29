@@ -76,8 +76,8 @@ function processData(raw) {
     strokeWidth: +d["stroke-width"],
   }));
   const baseSettings = {
-    width: settings.width || 1600,
-    height: settings.height || 900,
+    width: Number(settings.width) || 1600,
+    height: Number(settings.height) || 900,
     label: settings.label || "",
     step: settings.step || 5,
     oxDimension: convertStep(settings.oxDimension),

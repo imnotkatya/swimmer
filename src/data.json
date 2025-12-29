@@ -155,16 +155,83 @@
       "two___event": "2024-02-20",
       "three___event": "",
       "four___event": ""
+    },
+     {
+       "diagnose":"diagnose 7",
+      "name": "7",
+      "data___start": "2021-03-28",
+      "data___end": "2024-03-10",
+      "death___event": "2024-03-11",
+      "nodeath___event": "",
+      "first___start": "2021-04-08",
+      "first___end": "2022-03-22",
+      "first_PR_1___event": "2021-11-24",
+      "first_СR_1___event": "",
+      "second___start": "2022-05-25",
+      "second___end": "2022-10-04",
+      "third___start": "",
+      "third___end": "",
+      "fourth___start": "",
+      "fourth___end": "",
+      "fifth___start": "2023-01-12",
+      "fifth___end": "2024-02-20",
+      "six___start": "",
+      "six___end": "",
+      "one___event": "",
+      "two___event": "2024-02-20",
+      "three___event": "",
+      "four___event": ""
+    }, {
+       "diagnose":"diagnose 8",
+      "name": "8",
+      "data___start": "2021-03-28",
+      "data___end": "2024-03-10",
+      "death___event": "2024-03-11",
+      "nodeath___event": "",
+      "first___start": "2021-04-08",
+      "first___end": "2022-03-22",
+      "first_PR_1___event": "2021-11-24",
+      "first_СR_1___event": "",
+      "second___start": "2022-05-25",
+      "second___end": "2022-10-04",
+      "third___start": "",
+      "third___end": "",
+      "fourth___start": "",
+      "fourth___end": "",
+      "fifth___start": "2023-01-12",
+      "fifth___end": "2024-02-20",
+      "six___start": "",
+      "six___end": "",
+      "one___event": "",
+      "two___event": "2024-02-20",
+      "three___event": "",
+      "four___event": ""
     }
     
   ],
   "settings": [
-    {"measure": "height", "value":"900"},
-     {"measure": "width", "value":"1200"},
-      {"measure": "oxDimension", "value":"month"},
-       {"measure": "label", "value":"Time since start, months"}, 
-       {"measure": "step", "value":"6"}
-   
+    {
+     "measure": "height",
+     "value":"900"
+    },
+    {
+     "measure": "width",
+      "value":"1200"
+    },
+    {
+     "measure": "oxDimension",
+      "value":"month"
+    },
+    {
+     "measure": "label",
+     "value":"Time since start, months"
+    }, 
+    {
+     "measure": "step",
+      "value":"6"
+    }
+
+
   ],
   "styles": [
     {
