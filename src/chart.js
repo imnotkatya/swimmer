@@ -9,6 +9,57 @@ export function createScale(colors, property) {
     .range(colors.map((c) => c[property]));
 }
 
+export function exportAsSVG(container, filename = "swimmer_plot") {
+  const svg = container.querySelector("svg");
+  if (!svg) {
+    alert("Сначала постройте график");
+    return;
+  }
+
+  const clone = svg.cloneNode(true);
+
+  clone.setAttribute("version", "1.1");
+  clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  clone.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+
+  const style = document.createElement("style");
+  style.textContent = `
+    @font-face {
+      font-family: 'SymbolsNerdFontMono-Regular';
+      src: url('./SymbolsNerdFontMono-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: block;
+    }
+    
+    text {
+      font-family: 'SymbolsNerdFontMono-Regular', Arial, sans-serif;
+    }
+    
+    .x-label {
+      font-family: Arial, sans-serif;
+    }
+    
+    .legend-label {
+      font-family: Arial, sans-serif;
+    }
+  `;
+
+  const defs = document.createElement("defs");
+  defs.appendChild(style);
+  clone.insertBefore(defs, clone.firstChild);
+
+  const serializer = new XMLSerializer();
+  const source = serializer.serializeToString(clone);
+
+  const dateStr = new Date().toISOString().split("T")[0];
+  const finalFilename = `${filename}_${dateStr}.svg`;
+
+  const blob = new Blob([source], { type: "image/svg+xml;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  downloadFile(url, finalFilename);
+}
+
 function getDomainX(parsedDatasetLong) {
   const times = parsedDatasetLong.rectangles
     .fold(["start", "end"], { as: ["type", "time"] })
@@ -74,7 +125,7 @@ function drawRects(svg, otherRectangles, scales, x, y) {
       (d) =>
         y(d._rowNumber) +
         (y.bandwidth() - columnHeight(d.nameOfFigure)) / 2 +
-        yModified(d.nameOfFigure)
+        yModified(d.nameOfFigure),
     )
     .attr("x", (d) => x(d.start))
     .attr("height", (d) => columnHeight(d.nameOfFigure))
@@ -92,7 +143,7 @@ function drawEvents(svg, events, scales, x, y) {
     .attr("x", (d) => x(d.event) + xModified(d.nameOfFigure))
     .attr(
       "y",
-      (d) => y(d._rowNumber) + y.bandwidth() / 2 + yModified(d.nameOfFigure)
+      (d) => y(d._rowNumber) + y.bandwidth() / 2 + yModified(d.nameOfFigure),
     )
     .attr("opacity", (d) => (d.event >= 0 ? 1 : 0))
     .attr("fill", (d) => color(d.nameOfFigure))
@@ -174,7 +225,7 @@ function getTicks(minValue, maxValue, userStep) {
     .range(
       Math.floor(minValue / userStep) * userStep,
       maxValue + userStep,
-      userStep
+      userStep,
     )
     .filter((value) => value <= maxValue);
 }
@@ -345,11 +396,11 @@ function drawChart(processedData, container) {
   const events = parsedDatasetLong.events.objects();
 
   const lineRectangles = rectanglesArray.filter(
-    (d) => scales.typeFigure(d.nameOfFigure) === "line"
+    (d) => scales.typeFigure(d.nameOfFigure) === "line",
   );
 
   const otherRectangles = rectanglesArray.filter(
-    (d) => scales.typeFigure(d.nameOfFigure) !== "line"
+    (d) => scales.typeFigure(d.nameOfFigure) !== "line",
   );
 
   drawLines(svg, lineRectangles, scales, x, y);
@@ -359,6 +410,19 @@ function drawChart(processedData, container) {
   drawTable(svg, tableData, patients, fields, y);
 
   drawLegend(svg, scales, settingsContext, colors);
+  const exportBtn = document.createElement("button");
+  exportBtn.textContent = "📥 Сохранить как SVG";
+  exportBtn.onclick = () => {
+    const svg = container.querySelector("svg");
+    const blob = new Blob([svg.outerHTML], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "график.svg";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  container.appendChild(exportBtn);
 }
 
 export async function drawPlot(processedData, chartContainer) {
