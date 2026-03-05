@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-
 import * as aq from "arquero";
 
 export function createScale(colors, property) {
@@ -18,46 +17,90 @@ export function exportAsSVG(container, filename = "swimmer_plot") {
 
   const clone = svg.cloneNode(true);
 
-  clone.setAttribute("version", "1.1");
-  clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-  clone.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+  // Читаем файл шрифта и конвертируем в base64
+  fetch("./SymbolsNerdFontMono-Regular.ttf")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Файл шрифта не найден");
+      }
+      return response.blob();
+    })
+    .then((blob) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64Font = reader.result;
 
-  const style = document.createElement("style");
-  style.textContent = `
-    @font-face {
-      font-family: 'SymbolsNerdFontMono-Regular';
-      src: url('./SymbolsNerdFontMono-Regular.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-      font-display: block;
-    }
-    
-    text {
-      font-family: 'SymbolsNerdFontMono-Regular', Arial, sans-serif;
-    }
-    
-    .x-label {
-      font-family: Arial, sans-serif;
-    }
-    
-    .legend-label {
-      font-family: Arial, sans-serif;
-    }
-  `;
+        const style = document.createElement("style");
+        style.textContent = `
+          @font-face {
+            font-family: 'SymbolsNerdFontMono-Regular';
+            src: url(${base64Font}) format('truetype');
+            font-weight: normal;
+            font-style: normal;
+          }
+          
+          text {
+            font-family: 'SymbolsNerdFontMono-Regular', Arial, sans-serif;
+          }
+        `;
 
-  const defs = document.createElement("defs");
-  defs.appendChild(style);
-  clone.insertBefore(defs, clone.firstChild);
+        const defs = document.createElement("defs");
+        defs.appendChild(style);
+        clone.insertBefore(defs, clone.firstChild);
 
-  const serializer = new XMLSerializer();
-  const source = serializer.serializeToString(clone);
+        clone.setAttribute("version", "1.1");
+        clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        clone.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
 
-  const dateStr = new Date().toISOString().split("T")[0];
-  const finalFilename = `${filename}_${dateStr}.svg`;
+        const serializer = new XMLSerializer();
+        const source = serializer.serializeToString(clone);
 
-  const blob = new Blob([source], { type: "image/svg+xml;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  downloadFile(url, finalFilename);
+        const dateStr = new Date().toISOString().split("T")[0];
+        const finalFilename = `${filename}_${dateStr}.svg`;
+
+        const blob = new Blob([source], {
+          type: "image/svg+xml;charset=utf-8",
+        });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = finalFilename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      };
+      reader.readAsDataURL(blob);
+    })
+    .catch((error) => {
+      console.error("Ошибка при загрузке шрифта:", error);
+      alert(
+        "Не удалось загрузить файл шрифта. Проверьте путь ./SymbolsNerdFontMono-Regular.ttf",
+      );
+
+      // Fallback: экспорт без встраивания шрифта
+      clone.setAttribute("version", "1.1");
+      clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+      clone.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+
+      const serializer = new XMLSerializer();
+      const source = serializer.serializeToString(clone);
+
+      const dateStr = new Date().toISOString().split("T")[0];
+      const finalFilename = `${filename}_${dateStr}.svg`;
+
+      const blob = new Blob([source], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = finalFilename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
 }
 
 function getDomainX(parsedDatasetLong) {
@@ -68,6 +111,7 @@ function getDomainX(parsedDatasetLong) {
     .array("time");
   return d3.extent(times);
 }
+
 export function convertStep(oxDimension) {
   if (typeof oxDimension === "string") {
     const normalizedStep = oxDimension.toLowerCase().trim();
@@ -81,6 +125,7 @@ export function convertStep(oxDimension) {
     }
   } else return oxDimension;
 }
+
 function drawLines(svg, lineRectangles, scales, x, y) {
   const { strokeColor, strokeWidth, strokeDash } = scales;
 
@@ -220,6 +265,7 @@ function calculateLegendWidth(uniqueLabels) {
       .object().max_length * 6
   );
 }
+
 function getTicks(minValue, maxValue, userStep) {
   return d3
     .range(
@@ -366,7 +412,6 @@ function drawChart(processedData, container) {
     .scaleLinear()
     .domain(getDomainX(parsedDatasetLong))
     .nice()
-
     .range([marginLeft, width - marginRight]);
 
   const userStep = baseSettings.step;
@@ -392,6 +437,7 @@ function drawChart(processedData, container) {
     .style("font-size", "18px")
     .style("fill", "#333")
     .text(baseSettings.label);
+
   const rectanglesArray = parsedDatasetLong.rectangles.objects();
   const events = parsedDatasetLong.events.objects();
 
@@ -408,21 +454,20 @@ function drawChart(processedData, container) {
   drawEvents(svg, events, scales, x, y);
 
   drawTable(svg, tableData, patients, fields, y);
-
   drawLegend(svg, scales, settingsContext, colors);
+
+  const buttonContainer = document.createElement("div");
+  buttonContainer.style.marginTop = "10px";
+  buttonContainer.style.display = "flex";
+  buttonContainer.style.gap = "10px";
+
   const exportBtn = document.createElement("button");
-  exportBtn.textContent = "📥 Сохранить как SVG";
-  exportBtn.onclick = () => {
-    const svg = container.querySelector("svg");
-    const blob = new Blob([svg.outerHTML], { type: "image/svg+xml" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "график.svg";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-  container.appendChild(exportBtn);
+  exportBtn.textContent = "Сохранить как SVG";
+  exportBtn.onclick = () => exportAsSVG(container, "swimmer.svg");
+
+  buttonContainer.appendChild(exportBtn);
+
+  container.appendChild(buttonContainer);
 }
 
 export async function drawPlot(processedData, chartContainer) {
