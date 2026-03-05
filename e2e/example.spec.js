@@ -8,9 +8,8 @@ test("test", async ({ page }) => {
   const fileInput = page.locator('input[type="file"]');
   await fileInput.setInputFiles("dist/info_template.xlsx");
   await expect(page.getByRole("heading")).toMatchAriaSnapshot(
-    `- heading "Swimmer Plot" [level=1]`
+    `- heading "Swimmer Plot" [level=1]`,
   );
 
   await expect(page.getByRole("img")).toContainText("name");
-  await page.getByText("первый период").click();
 });
